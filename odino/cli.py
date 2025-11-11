@@ -23,6 +23,7 @@ app = typer.Typer(
 )
 console = Console()
 
+
 def version_callback(value: bool) -> None:
     """Show version information."""
     if value:
@@ -34,12 +35,47 @@ def version_callback(value: bool) -> None:
 @app.callback(invoke_without_command=True)
 def main(
     ctx: typer.Context,
-    version: Annotated[bool, typer.Option("--version", "-v", help="Show version and exit", callback=version_callback, is_eager=True)] = None,
-    query_text: Annotated[Optional[str], typer.Option("--query", "-q", help="Search query in natural language")] = None,
-    results: Annotated[Optional[int], typer.Option("--results", "-r", help="Number of results to return", min=1, max=100)] = None,
-    include: Annotated[Optional[str], typer.Option("--include", help="Include only files matching this pattern (glob)")] = None,
-    exclude: Annotated[Optional[str], typer.Option("--exclude", help="Exclude files matching this pattern (glob)")] = None,
-    path: Annotated[Optional[Path], typer.Option("--path", "-p", help="Directory to search in", exists=True, file_okay=False, dir_okay=True)] = None,
+    version: Annotated[
+        bool,
+        typer.Option(
+            "--version",
+            "-v",
+            help="Show version and exit",
+            callback=version_callback,
+            is_eager=True,
+        ),
+    ] = None,
+    query_text: Annotated[
+        Optional[str],
+        typer.Option("--query", "-q", help="Search query in natural language"),
+    ] = None,
+    results: Annotated[
+        Optional[int],
+        typer.Option(
+            "--results", "-r", help="Number of results to return", min=1, max=100
+        ),
+    ] = None,
+    include: Annotated[
+        Optional[str],
+        typer.Option(
+            "--include", help="Include only files matching this pattern (glob)"
+        ),
+    ] = None,
+    exclude: Annotated[
+        Optional[str],
+        typer.Option("--exclude", help="Exclude files matching this pattern (glob)"),
+    ] = None,
+    path: Annotated[
+        Optional[Path],
+        typer.Option(
+            "--path",
+            "-p",
+            help="Directory to search in",
+            exists=True,
+            file_okay=False,
+            dir_okay=True,
+        ),
+    ] = None,
 ) -> None:
     """Odino - Local semantic search CLI for codebases."""
     if ctx.invoked_subcommand is None:
@@ -96,43 +132,50 @@ def index(
     """Index files in a directory for semantic search."""
     try:
         config = load_config(path)
-        
+
         # Update config with command line options
         config["model_name"] = model
         config["chunk_size"] = chunk_size
         config["chunk_overlap"] = chunk_overlap
-        
+
         save_config(path, config)
-        
-        console.print(Panel.fit(
-            f"[bold blue]Indexing directory:[/bold blue] {path.absolute()}\n"
-            f"[bold blue]Model:[/bold blue] {model}\n"
-            f"[bold blue]Chunk size:[/bold blue] {chunk_size}\n"
-            f"[bold blue]Chunk overlap:[/bold blue] {chunk_overlap}",
-            title="Odino Indexer",
-            border_style="blue"
-        ))
-        
+
+        console.print(
+            Panel.fit(
+                f"[bold blue]Indexing directory:[/bold blue] {path.absolute()}\n"
+                f"[bold blue]Model:[/bold blue] {model}\n"
+                f"[bold blue]Chunk size:[/bold blue] {chunk_size}\n"
+                f"[bold blue]Chunk overlap:[/bold blue] {chunk_overlap}",
+                title="Odino Indexer",
+                border_style="blue",
+            )
+        )
+
         indexer = Indexer(path, console)
-        
+
         with Progress(
             SpinnerColumn(),
             TextColumn("[progress.description]{task.description}"),
             console=console,
         ) as progress:
             task = progress.add_task("Initializing...", total=None)
-            
-            stats = indexer.index(force=force, progress_callback=lambda msg: progress.update(task, description=msg))
-        
-        console.print(Panel.fit(
-            f"[bold green]Indexing complete![/bold green]\n"
-            f"Files indexed: {stats['files_indexed']}\n"
-            f"Chunks created: {stats['chunks_created']}\n"
-            f"Total size: {stats['total_size_mb']:.1f} MB",
-            title="Success",
-            border_style="green"
-        ))
-        
+
+            stats = indexer.index(
+                force=force,
+                progress_callback=lambda msg: progress.update(task, description=msg),
+            )
+
+        console.print(
+            Panel.fit(
+                f"[bold green]Indexing complete![/bold green]\n"
+                f"Files indexed: {stats['files_indexed']}\n"
+                f"Chunks created: {stats['chunks_created']}\n"
+                f"Total size: {stats['total_size_mb']:.1f} MB",
+                title="Success",
+                border_style="green",
+            )
+        )
+
     except Exception as e:
         console.print(f"[bold red]Error during indexing:[/bold red] {e}")
         raise typer.Exit(1)
@@ -175,19 +218,23 @@ def query(
     """Search indexed files using natural language queries."""
     try:
         config = load_config(path)
-        
-        effective_results = results if results is not None else config.get("max_results", 2)
-        
-        console.print(Panel.fit(
-            f"[bold blue]Searching:[/bold blue] {query_text}\n"
-            f"[bold blue]Directory:[/bold blue] {path.absolute()}\n"
-            f"[bold blue]Max results:[/bold blue] {effective_results}",
-            title="Odino Search",
-            border_style="blue"
-        ))
-        
+
+        effective_results = (
+            results if results is not None else config.get("max_results", 2)
+        )
+
+        console.print(
+            Panel.fit(
+                f"[bold blue]Searching:[/bold blue] {query_text}\n"
+                f"[bold blue]Directory:[/bold blue] {path.absolute()}\n"
+                f"[bold blue]Max results:[/bold blue] {effective_results}",
+                title="Odino Search",
+                border_style="blue",
+            )
+        )
+
         searcher = Searcher(path, console)
-        
+
         with console.status("[bold blue]Searching..."):
             search_results = searcher.search(
                 query_text,
@@ -195,23 +242,23 @@ def query(
                 include_pattern=include,
                 exclude_pattern=exclude,
             )
-        
+
         if not search_results:
             console.print("[yellow]No results found. Try a different query.[/yellow]")
             return
-        
+
         # Display results in a table
         table = Table(show_header=True, header_style="bold magenta")
         table.add_column("File", style="cyan", no_wrap=False)
         table.add_column("Score", style="green", width=8)
         table.add_column("Content", style="white")
-        
+
         for result in search_results:
             file_path = result.file_path
             score = f"{result.score:.3f}"
             content = result.content
             start_line = result.start_line
-            
+
             # Create syntax highlighted content
             try:
                 syntax = Syntax(
@@ -226,10 +273,10 @@ def query(
             except Exception:
                 # Fallback to plain text
                 table.add_row(file_path, score, content)
-        
+
         console.print(table)
         console.print(f"\n[bold green]Found {len(search_results)} results[/bold green]")
-        
+
     except Exception as e:
         console.print(f"[bold red]Error during search:[/bold red] {e}")
         raise typer.Exit(1)
@@ -249,36 +296,36 @@ def status(
     try:
         config = load_config(path)
         odino_dir = path / ".odino"
-        
+
         if not odino_dir.exists():
             console.print("[yellow]No index found. Run 'odino index' first.[/yellow]")
             return
-        
+
         # Get index info
         from .searcher import Searcher
+
         searcher = Searcher(path, config)
         index_info = searcher.get_index_info()
-        
-        console.print(Panel.fit(
-            f"[bold blue]Configuration:[/bold blue]\n"
-            f"  Model: {config['model_name']}\n"
-            f"  Chunk size: {config['chunk_size']}\n"
-            f"  Chunk overlap: {config['chunk_overlap']}\n"
-            f"  Max results: {config['max_results']}\n\n"
-            f"[bold blue]Index Status:[/bold blue]\n"
-            f"  Total chunks: {index_info['total_chunks']}\n"
-            f"  Indexed files: {index_info['indexed_files']}\n"
-            f"  Last updated: {index_info['last_updated']}",
-            title="Odino Status",
-            border_style="blue"
-        ))
-        
+
+        console.print(
+            Panel.fit(
+                f"[bold blue]Configuration:[/bold blue]\n"
+                f"  Model: {config['model_name']}\n"
+                f"  Chunk size: {config['chunk_size']}\n"
+                f"  Chunk overlap: {config['chunk_overlap']}\n"
+                f"  Max results: {config['max_results']}\n\n"
+                f"[bold blue]Index Status:[/bold blue]\n"
+                f"  Total chunks: {index_info['total_chunks']}\n"
+                f"  Indexed files: {index_info['indexed_files']}\n"
+                f"  Last updated: {index_info['last_updated']}",
+                title="Odino Status",
+                border_style="blue",
+            )
+        )
+
     except Exception as e:
         console.print(f"[bold red]Error getting status:[/bold red] {e}")
         raise typer.Exit(1)
-
-
-
 
 
 if __name__ == "__main__":

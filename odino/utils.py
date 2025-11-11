@@ -86,7 +86,13 @@ def load_ignore_patterns(path: Path) -> pathspec.PathSpec:
     if odinoignore_file.exists():
         try:
             with open(odinoignore_file, "r", encoding="utf-8") as f:
-                patterns.extend([line.strip() for line in f if line.strip() and not line.startswith("#")])
+                patterns.extend(
+                    [
+                        line.strip()
+                        for line in f
+                        if line.strip() and not line.startswith("#")
+                    ]
+                )
         except IOError:
             pass
 
@@ -95,7 +101,13 @@ def load_ignore_patterns(path: Path) -> pathspec.PathSpec:
     if gitignore_file.exists():
         try:
             with open(gitignore_file, "r", encoding="utf-8") as f:
-                patterns.extend([line.strip() for line in f if line.strip() and not line.startswith("#")])
+                patterns.extend(
+                    [
+                        line.strip()
+                        for line in f
+                        if line.strip() and not line.startswith("#")
+                    ]
+                )
         except IOError:
             pass
 
@@ -129,22 +141,66 @@ def is_text_file(file_path: Path) -> bool:
     """Heuristic to check if a file is text."""
     ext = file_path.suffix.lower()
     text_exts = {
-        ".py", ".js", ".ts", ".jsx", ".tsx",
-        ".json", ".md", ".txt", ".yaml", ".yml",
-        ".html", ".css", ".sql", ".xml",
-        ".sh", ".bash", ".zsh", ".fish",
-        ".java", ".c", ".h", ".hpp", ".cpp",
-        ".rs", ".go", ".rb", ".php", ".swift",
-        ".kt", ".scala", ".r", ".pl", ".lua",
+        ".py",
+        ".js",
+        ".ts",
+        ".jsx",
+        ".tsx",
+        ".json",
+        ".md",
+        ".txt",
+        ".yaml",
+        ".yml",
+        ".html",
+        ".css",
+        ".sql",
+        ".xml",
+        ".sh",
+        ".bash",
+        ".zsh",
+        ".fish",
+        ".java",
+        ".c",
+        ".h",
+        ".hpp",
+        ".cpp",
+        ".rs",
+        ".go",
+        ".rb",
+        ".php",
+        ".swift",
+        ".kt",
+        ".scala",
+        ".r",
+        ".pl",
+        ".lua",
         ".dart",
     }
     if ext in text_exts:
         return True
     binary_exts = {
-        ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico",
-        ".pdf", ".zip", ".tar", ".gz", ".rar", ".7z",
-        ".mp3", ".mp4", ".mov", ".avi", ".mkv",
-        ".exe", ".dll", ".so", ".dylib",
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".gif",
+        ".bmp",
+        ".tiff",
+        ".ico",
+        ".pdf",
+        ".zip",
+        ".tar",
+        ".gz",
+        ".rar",
+        ".7z",
+        ".mp3",
+        ".mp4",
+        ".mov",
+        ".avi",
+        ".mkv",
+        ".exe",
+        ".dll",
+        ".so",
+        ".dylib",
     }
     if ext in binary_exts:
         return False
@@ -175,12 +231,14 @@ def chunk_text(text: str, chunk_size: int, overlap: int) -> List[Dict]:
     while start < len(lines):
         end = min(start + max(1, chunk_size // 4), len(lines))  # approx by lines
         chunk_text_str = "\n".join(lines[start:end])
-        chunks.append({
-            "text": chunk_text_str,
-            "start_line": start + 1,
-            "end_line": end,
-            "chunk_id": chunk_id,
-        })
+        chunks.append(
+            {
+                "text": chunk_text_str,
+                "start_line": start + 1,
+                "end_line": end,
+                "chunk_id": chunk_id,
+            }
+        )
         if end == len(lines):
             break
         start = max(0, end - max(0, overlap // 4))

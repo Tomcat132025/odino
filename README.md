@@ -2,6 +2,13 @@
 
 A fast local semantic search tool that helps you find code using natural language queries. No internet required, everything runs locally using the embeddinggemma-300m model.
 
+<p align="center">
+<a href="https://pypi.org/project/odino/"><img alt="PyPI" src="https://badge.fury.io/py/odino.svg"></a>
+<a href="https://www.gnu.org/licenses/gpl-3.0"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg"></a>
+<a href="https://pypi.org/project/odino"><img alt="Supported Python Versions" src="https://img.shields.io/pypi/pyversions/odino?color=brightgreen"></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+</p>
+
 ## Quick Start
 
 Install Odino directly from PyPI:
@@ -200,6 +207,18 @@ For advanced memory management configuration and more detailed troubleshooting, 
 3. Make your changes
 4. Add tests if applicable
 5. Submit a pull request
+
+## For AI Agents
+
+AI agents working with this codebase should refer to the [ODINO.md](ODINO.md) file for detailed usage instructions and best practices. This file contains comprehensive documentation on:
+
+- **Basic Commands**: Indexing and searching operations
+- **Advanced Search Options**: Filtering, path targeting, and result limiting
+- **Semantic Search Capabilities**: How to find files by meaning rather than exact keywords
+- **Best Practices**: When to use Odino vs traditional grep, filtering strategies, and query optimization
+- **Workflow Examples**: Real-world usage patterns for code discovery
+
+The ODINO.md file is specifically designed to help AI agents understand how to effectively use Odino's semantic search capabilities to navigate and understand codebases during development tasks.
 
 ## License
 
