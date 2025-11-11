@@ -27,8 +27,7 @@ console = Console()
 def version_callback(value: bool) -> None:
     """Show version information."""
     if value:
-        console.print("Odino v1.0.0 - Local Semantic Search CLI")
-        console.print("Using embeddinggemma-300m model for fast indexing")
+        console.print("Odino v0.1.3 - Local Semantic Search CLI")
         raise typer.Exit()
 
 
