@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "odino"
-version = "0.1.3"
+version = "0.1.4"
 description = "Local semantic search CLI tool for codebases using embeddings"
 readme = "README.md"
 license = {text = "GPL-3.0-only"}
